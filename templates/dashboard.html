@@ -8,12 +8,28 @@
 <main>
     <div class="card">
         <h2>Assignments</h2>
-        <p>No assignments</p>
+        {% if assignments %}
+            <ul>
+                {% for a in assignemnts %}
+                    <li>{{ a[0] }} - {{ a[1] }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No assignemnts yet!</p>
+        {% endif %}
     </div>
 
     <div class="card">
         <h2>Events</h2>
-        <p>No events yet!</p>
+        {% if events %}
+            <ul>
+                {% for a in events %}
+                    <li>{{ a[0] }} - {{ a[1] }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No events yet!</p>
+        {% endif %}
     </div>
 </main>
 {% endblock %}
