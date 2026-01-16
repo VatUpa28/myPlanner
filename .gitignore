@@ -1,6 +1,2 @@
-# Python files
-*.pyc
-__pycache__/
-
 # SQLite database
 database/*.db
