@@ -42,11 +42,11 @@ def dashboard():
     c = conn.cursor()
 
     # Get all assignments
-    c.execute("SELECT title, due_date FROM assignments")
+    c.execute("SELECT id, title, due_date FROM assignments")
     assignments = c.fetchall()
 
     # Get all events
-    c.execute("SELECT name, date FROM events")
+    c.execute("SELECT id, name, date FROM events")
     events = c.fetchall()
 
     conn.close()
@@ -86,6 +86,30 @@ def add_event():
 
     conn.commit()
     conn.close
+
+    return redirect(url_for("dashboard"))
+
+@app.route("/delete-assignments/<int:id>", methods=["POST"])
+def delete_assignment(id):
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+
+    c.execute("DELETE FROM assignments WHERE id = ?", (id, ))
+
+    conn.commit()
+    conn.close()
+     
+    return redirect(url_for("dashboard"))
+
+@app.route("/delete-events/<int:id>", methods=["POST"])
+def delete_event(id):
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+
+    c.execute("DELETE FROM events WHERE id = ?", (id, ))
+
+    conn.commit()
+    conn.close()
 
     return redirect(url_for("dashboard"))
 
