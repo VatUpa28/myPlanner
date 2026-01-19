@@ -58,6 +58,11 @@
         >
           <button type="submit">Delete</button>
         </form>
+        <form method="POST" action="{{ url_for('update_assignment', id=a[0]) }}">
+        <input type="text" name="title" value="{{ a[1] }}" required>
+        <input type="date" name="due_date" value="{{ a[2] }}">
+        <button type="submit">Update</button>
+        </form>
       </li>
       {% endfor %}
     </ul>
@@ -79,6 +84,11 @@
           style="display: inline"
         >
           <button type="submit">Delete</button>
+        </form>
+        <form method="POST" action="{{ url_for('update_event', id=a[0]) }}">
+        <input type="text" name="name" value="{{ a[1] }}" required>
+        <input type="date" name="date" value="{{ a[2] }}">
+        <button type="submit">Update</button>
         </form>
       </li>
       {% endfor %}
