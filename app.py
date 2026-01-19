@@ -6,11 +6,9 @@ from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-# Ensure database folder exists
 if not os.path.exists("database"):
     os.makedirs("database")
 
-# Path to database
 db_path = "database/myPlanner.db"
 
 def init_db():
@@ -20,7 +18,7 @@ def init_db():
     c.execute('''
         CREATE TABLE IF NOT EXISTS assignments (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
+            name TEXT NOT NULL,
             due_date TEXT
         )
     ''')
@@ -41,11 +39,9 @@ def dashboard():
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
 
-    # Get all assignments
-    c.execute("SELECT id, title, due_date FROM assignments")
+    c.execute("SELECT id, name, due_date FROM assignments")
     assignments = c.fetchall()
 
-    # Get all events
     c.execute("SELECT id, name, date FROM events")
     events = c.fetchall()
 
@@ -55,17 +51,12 @@ def dashboard():
 
 @app.route("/add-assignment", methods=["POST"])
 def add_assignment():
-    title = request.form["title"]
+    name = request.form["name"]
     due_date = request.form["due_date"]
 
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-
-    c.execute(
-        "INSERT INTO assignments (title, due_date) VALUES (?, ?)",
-        (title, due_date)
-    )
-
+    c.execute("INSERT INTO assignments (name, due_date) VALUES (?, ?)", (name, due_date))
     conn.commit()
     conn.close()
 
@@ -78,14 +69,9 @@ def add_event():
 
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-
-    c.execute(
-        "INSERT INTO events (name, date) VALUES (?, ?)",
-        (name, date)
-    )
-
+    c.execute("INSERT INTO events (name, date) VALUES (?, ?)", (name, date))
     conn.commit()
-    conn.close
+    conn.close()
 
     return redirect(url_for("dashboard"))
 
@@ -93,56 +79,42 @@ def add_event():
 def delete_assignment(id):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-
-    c.execute("DELETE FROM assignments WHERE id = ?", (id, ))
-
+    c.execute("DELETE FROM assignments WHERE id = ?", (id,))
     conn.commit()
     conn.close()
-     
     return redirect(url_for("dashboard"))
 
 @app.route("/delete-events/<int:id>", methods=["POST"])
 def delete_event(id):
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-
-    c.execute("DELETE FROM events WHERE id = ?", (id, ))
-
+    c.execute("DELETE FROM events WHERE id = ?", (id,))
     conn.commit()
     conn.close()
-
     return redirect(url_for("dashboard"))
 
 @app.route("/update-assignments/<int:id>", methods=["POST"])
 def update_assignment(id):
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-
-    title = request.form["title"]
+    name = request.form["name"]
     due_date = request.form["due_date"]
 
-    c.execute("UPDATE assignments SET title = ?, due_date = ? WHERE id = ?", 
-              (title, due_date, id))
-
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    c.execute("UPDATE assignments SET name = ?, due_date = ? WHERE id = ?", (name, due_date, id))
     conn.commit()
     conn.close()
-
     return redirect(url_for("dashboard"))
 
 @app.route("/update-events/<int:id>", methods=["POST"])
 def update_event(id):
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
-
     name = request.form["name"]
     date = request.form["date"]
 
-    c.execute("UPDATE events SET name = ?, date = ? WHERE id = ?",
-              (name, date, id))
-
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    c.execute("UPDATE events SET name = ?, date = ? WHERE id = ?", (name, date, id))
     conn.commit()
     conn.close()
-
     return redirect(url_for("dashboard"))
 
 if __name__ == "__main__":

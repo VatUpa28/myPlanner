@@ -1,13 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>myPlanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   </head>
-  <link
-    rel="stylesheet"
-    href="{{ url_for('static', filename='css/style.css') }}"
-  />
   <body>
     {% block content %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>

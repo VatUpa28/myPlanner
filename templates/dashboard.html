@@ -1,48 +1,12 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block content %}
 <header>
   <h1>Planner Dashboard</h1>
 </header>
 
 <main>
-  <div>
-    <h2>Add Assignment</h2>
-
-    <form method="POST" action="/add-assignment">
-      <label>
-        Title:
-        <input type="text" name="title" required />
-      </label>
-      <br />
-
-      <label>
-        Due Date:
-        <input type="date" name="due_date" />
-      </label>
-      <br />
-
-      <button type="submit">Add</button>
-    </form>
-  </div>
-
-  <div>
-    <h2>Add Event</h2>
-
-    <form action="/add-event" method="post">
-      <label>
-        Title:
-        <input type="text" name="name" required />
-      </label>
-      <br />
-
-      <label>
-        Date:
-        <input type="date" name="date" />
-      </label>
-      <br />
-
-      <button type="submit">Add</button>
-    </form>
-  </div>
+  <button id="AddAssignmentBtn">Add Assignment</button>
+  <button id="AddEventBtn">Add Event</button>
 
   <div class="card">
     <h2>Assignments</h2>
@@ -50,18 +14,14 @@
     <ul>
       {% for a in assignments %}
       <li>
-        {{ a[0] }} - {{ a[1] }}
-        <form
-          action="{{ url_for('delete_assignment', id=a[0]) }}"
-          method="POST"
-          style="display: inline"
-        >
+        {{ a[1] }} - {{ a[2] }}
+        <form action="{{ url_for('delete_assignment', id=a[0]) }}" method="POST" style="display:inline;">
           <button type="submit">Delete</button>
         </form>
-        <form method="POST" action="{{ url_for('update_assignment', id=a[0]) }}">
-        <input type="text" name="title" value="{{ a[1] }}" required>
-        <input type="date" name="due_date" value="{{ a[2] }}">
-        <button type="submit">Update</button>
+        <form method="POST" action="{{ url_for('update_assignment', id=a[0]) }}" style="display:inline;">
+          <input type="text" name="name" value="{{ a[1] }}" required>
+          <input type="date" name="due_date" value="{{ a[2] }}">
+          <button type="submit">Update</button>
         </form>
       </li>
       {% endfor %}
@@ -75,20 +35,16 @@
     <h2>Events</h2>
     {% if events %}
     <ul>
-      {% for a in events %}
+      {% for e in events %}
       <li>
-        {{ a[0] }} - {{ a[1] }}
-        <form
-          action="{{ url_for('delete_event', id=a[0]) }}"
-          method="POST"
-          style="display: inline"
-        >
+        {{ e[1] }} - {{ e[2] }}
+        <form action="{{ url_for('delete_event', id=e[0]) }}" method="POST" style="display:inline;">
           <button type="submit">Delete</button>
         </form>
-        <form method="POST" action="{{ url_for('update_event', id=a[0]) }}">
-        <input type="text" name="name" value="{{ a[1] }}" required>
-        <input type="date" name="date" value="{{ a[2] }}">
-        <button type="submit">Update</button>
+        <form method="POST" action="{{ url_for('update_event', id=e[0]) }}" style="display:inline;">
+          <input type="text" name="name" value="{{ e[1] }}" required>
+          <input type="date" name="date" value="{{ e[2] }}">
+          <button type="submit">Update</button>
         </form>
       </li>
       {% endfor %}
@@ -96,6 +52,34 @@
     {% else %}
     <p>No events yet!</p>
     {% endif %}
+  </div>
+
+  <div id="AddAssignmentModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add Assignment</h2>
+      <form action="{{ url_for('add_assignment') }}" method="POST">
+        <label for="name">Assignment:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="due_date">Due Date:</label>
+        <input type="date" id="due_date" name="due_date" required>
+        <button type="submit">Add</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="AddEventModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add Event</h2>
+      <form action="{{ url_for('add_event') }}" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="date">Date:</label>
+        <input type="date" name="date" id="date" required>
+        <button type="submit">Add</button>
+      </form>
+    </div>
   </div>
 </main>
 {% endblock %}
