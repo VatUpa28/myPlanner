@@ -1,4 +1,4 @@
-/* Basic styling for myPlanner dashboard */
+Basic styling for myPlanner dashboard
 
 body {
   font-family: Arial, sans-serif;
@@ -16,7 +16,7 @@ header {
 
 h1 {
   margin: 0;
-}
+} 
 
 main {
   padding: 20px;
